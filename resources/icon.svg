@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="navyBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0A1E4D"/>
+      <stop offset="52%" stop-color="#0F2D6B"/>
+      <stop offset="100%" stop-color="#071636"/>
+    </linearGradient>
+    <radialGradient id="cobaltGlow" cx="28%" cy="22%" r="60%">
+      <stop offset="0%" stop-color="#3B82F6" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#3B82F6" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="rimStroke" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.48"/>
+      <stop offset="50%" stop-color="#60A5FA" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#FFC247" stop-opacity="0.35"/>
+    </linearGradient>
+    <linearGradient id="playWhite" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#E6F2FF"/>
+    </linearGradient>
+  </defs>
+  <!-- macOS Rounded Squircle Base -->
+  <rect x="64" y="64" width="896" height="896" rx="210" fill="url(#navyBg)"/>
+  <rect x="64" y="64" width="896" height="896" rx="210" fill="url(#cobaltGlow)"/>
+  <rect x="74" y="74" width="876" height="876" rx="200" fill="none" stroke="url(#rimStroke)" stroke-width="10"/>
+
+  <!-- Precision Frosted Glass Aperture Ring -->
+  <circle cx="496" cy="526" r="268" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.30)" stroke-width="10"/>
+  <circle cx="496" cy="526" r="210" fill="rgba(7,18,44,0.42)" stroke="rgba(230,242,255,0.22)" stroke-width="4"/>
+
+  <!-- Clean Geometric Play Prism -->
+  <path d="M432 394 C432 372 456 359 474 371 L646 483 C662 494 662 518 646 529 L474 641 C456 653 432 640 432 618 Z" fill="url(#playWhite)"/>
+
+  <!-- Signature CHIBA & CHIBO 3 Golden Rounded Rays (#FFC247) -->
+  <line x1="696" y1="296" x2="754" y2="232" stroke="#FFC247" stroke-width="34" stroke-linecap="round"/>
+  <line x1="744" y1="364" x2="828" y2="338" stroke="#FFC247" stroke-width="34" stroke-linecap="round"/>
+  <line x1="752" y1="446" x2="828" y2="458" stroke="#FFC247" stroke-width="32" stroke-linecap="round"/>
+</svg>

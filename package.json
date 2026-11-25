@@ -1,0 +1,102 @@
+{
+  "name": "aplayer",
+  "version": "1.0.0",
+  "description": "APlayer — Universal Glassmorphism Media Player & Multi-Platform Downloader for macOS",
+  "author": "APlayer Personal Edition",
+  "private": true,
+  "main": "./out/main/index.js",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "preview": "electron-vite preview",
+    "start": "electron-vite build && electron .",
+    "typecheck": "tsc -p tsconfig.node.json --noEmit && tsc -p tsconfig.web.json --noEmit",
+    "test": "vitest run",
+    "build:mac": "electron-vite build && electron-builder --mac --arm64 --dir",
+    "install:mac": "bash scripts/install-mac-app.sh",
+    "build:dmg": "electron-vite build && electron-builder --mac --arm64"
+  },
+  "build": {
+    "appId": "com.personal.aplayer",
+    "productName": "APlayer",
+    "directories": {
+      "output": "dist_build",
+      "buildResources": "resources"
+    },
+    "files": [
+      "out/**/*",
+      "resources/**/*"
+    ],
+    "fileAssociations": [
+      {
+        "ext": [
+          "mp4",
+          "mkv",
+          "mov",
+          "avi",
+          "webm",
+          "flv",
+          "wmv",
+          "m4v",
+          "ts",
+          "mpg",
+          "mpeg"
+        ],
+        "name": "Video File",
+        "role": "Viewer"
+      },
+      {
+        "ext": [
+          "mp3",
+          "flac",
+          "wav",
+          "m4a",
+          "aac",
+          "ogg",
+          "opus",
+          "alac",
+          "wma",
+          "aiff"
+        ],
+        "name": "Audio File",
+        "role": "Viewer"
+      }
+    ],
+    "mac": {
+      "category": "public.app-category.music",
+      "icon": "resources/icon.icns",
+      "target": [
+        {
+          "target": "dir",
+          "arch": [
+            "arm64"
+          ]
+        }
+      ],
+      "hardenedRuntime": false,
+      "gatekeeperAssess": false,
+      "identity": null
+    }
+  },
+  "dependencies": {
+    "@fontsource/baloo-2": "^5.3.0",
+    "@fontsource/be-vietnam-pro": "^5.3.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "zustand": "^5.1.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.5",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.3.0",
+    "electron": "^45.4.1",
+    "electron-builder": "^26.18.0",
+    "electron-vite": "^6.0.0",
+    "tailwindcss": "^4.3.5",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.8",
+    "vitest": "^5.1.1"
+  }
+}
