@@ -13,6 +13,7 @@ import { PersonalizeView } from './components/PersonalizeView'
 import { Sidebar } from './components/Sidebar'
 import { Titlebar } from './components/Titlebar'
 import { ToastContainer } from './components/ToastContainer'
+import { VoiceStudioView } from './components/VoiceStudioView'
 import { IconUpload } from './components/icons/APlayerIcons'
 
 const FONT_STACKS: Record<string, string> = {
@@ -262,6 +263,9 @@ export const App: React.FC = () => {
           setActiveTab('downloader')
           break
         case '4':
+          setActiveTab('voice')
+          break
+        case '5':
           setActiveTab('personalize')
           break
         default:
@@ -357,6 +361,8 @@ export const App: React.FC = () => {
             )}
 
             {activeTab === 'downloader' && <DownloaderView />}
+
+            {activeTab === 'voice' && <VoiceStudioView />}
 
             {activeTab === 'personalize' && <PersonalizeView />}
           </div>

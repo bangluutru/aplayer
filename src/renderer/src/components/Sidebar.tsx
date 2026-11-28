@@ -11,6 +11,7 @@ import {
   IconDownloader,
   IconFolderAdd,
   IconLibrary,
+  IconMicrophone,
   IconNowPlaying,
   IconOpenFile,
   IconPersonalize
@@ -66,6 +67,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ onOpenFiles, onOpenFolder }) =
       icon: <IconDownloader size={18} />,
       badge: activeDownloadCount > 0 ? activeDownloadCount : undefined,
       activeDot: activeDownloadCount > 0
+    },
+    {
+      id: 'voice',
+      label: t.nav.voice,
+      icon: <IconMicrophone size={18} />,
+      badge: settings.voiceHub?.mode === 'remote' ? 'LAN' : undefined
     },
     {
       id: 'personalize',

@@ -1,6 +1,152 @@
 export type MediaKind = 'video' | 'audio'
 
-export type NavTab = 'player' | 'library' | 'downloader' | 'personalize'
+export type NavTab = 'player' | 'library' | 'downloader' | 'voice' | 'personalize'
+
+export type VoiceHubMode = 'local' | 'remote'
+export type VoiceEngineId = 'vieneu' | 'voxcpm2' | 'qwen3' | 'kokoro'
+export type VoiceLangCode = 'vi' | 'en' | 'ja'
+export type VoiceQualityProfile = 'studio' | 'balanced' | 'fast'
+
+export interface VoiceHubSettings {
+  mode: VoiceHubMode
+  localPort: number
+  remoteUrl: string
+  remoteToken: string
+  autoImportGenerated: boolean
+  outputDir: string
+  enableGeminiCloud: boolean
+}
+
+export interface VoiceHubMachineInfo {
+  hostname: string
+  mdns_host: string
+  local_ip: string
+  arch: string
+  ram_gb: number
+  hq_precision: string
+  voxcpm2_model: string
+  qwen3_model: string
+}
+
+export interface VoiceHubEngineInfo {
+  id: VoiceEngineId
+  name: string
+  sample_rate: number
+  languages: VoiceLangCode[]
+  ready: boolean
+  offline: boolean
+  license: string
+  precision: string
+  model_id?: string
+  supports_instruct: boolean
+  supports_clone: boolean
+  supports_quality: boolean
+  recommended_for: VoiceLangCode[]
+}
+
+export interface VoiceHubHealth {
+  ready: boolean
+  mode?: VoiceHubMode
+  baseUrl?: string
+  aiwf_root?: string | null
+  machine?: VoiceHubMachineInfo
+  voice_bank_count: number
+  engines: VoiceHubEngineInfo[]
+  gemini_available?: boolean
+  gemini_default_enabled: boolean
+  error?: string
+}
+
+export interface VoiceHubVoice {
+  id: string
+  name: string
+  lang: VoiceLangCode
+  gender: 'female' | 'male'
+  region?: string | null
+  description: string
+  engine: VoiceEngineId
+  compatible_engines: VoiceEngineId[]
+  priority: number
+  license: string
+  sa_notice: boolean
+  downloaded: boolean
+  instant_preview: boolean
+  duration_s?: number | null
+  sample_text: string
+  preview_url: string
+}
+
+export interface VoiceHubEmotion {
+  id: string
+  name: string
+  color: string
+}
+
+export interface VoiceHubCatalog {
+  ready: boolean
+  aiwf_root?: string | null
+  machine?: VoiceHubMachineInfo
+  engines: VoiceHubEngineInfo[]
+  voices: VoiceHubVoice[]
+  presets: Record<VoiceLangCode, Record<'word' | 'compound' | 'short' | 'long' | 'paragraph', string>>
+  emotions?: VoiceHubEmotion[]
+  gemini_available?: boolean
+  gemini_default_enabled: boolean
+}
+
+export interface VoiceHubSynthesizeRequest {
+  lang: VoiceLangCode
+  engine: VoiceEngineId
+  voice_id?: string | null
+  text: string
+  quality?: VoiceQualityProfile
+  speed?: number
+  instruct?: string | null
+  allow_sa?: boolean
+  compare_engine?: VoiceEngineId | null
+  ref_audio_path?: string | null
+  ref_text?: string | null
+}
+
+export interface VoiceHubOutputSlot {
+  slot: 'primary' | 'compare'
+  engine_key: VoiceEngineId
+  engine_label: string
+  voice: string
+  filename: string
+  audio_url: string
+  duration: number
+  sample_rate: number
+  elapsed_s: number
+  waveform: number[]
+}
+
+export interface VoiceHubRecipeResult {
+  cli: string
+  recipe: Record<string, unknown>
+}
+
+export interface VoiceHubJob {
+  id: string
+  state: 'queued' | 'running' | 'succeeded' | 'failed' | 'cancelled'
+  progress: number
+  message: string
+  request: VoiceHubSynthesizeRequest
+  machine?: VoiceHubMachineInfo
+  created_at: number
+  finished_at?: number
+  outputs: VoiceHubOutputSlot[]
+  primary?: VoiceHubOutputSlot | null
+  compare?: VoiceHubOutputSlot | null
+  recipe?: VoiceHubRecipeResult
+}
+
+export interface VoiceHubTokenInfo {
+  token: string
+  hostname: string
+  mdns_host: string
+  local_ip: string
+}
 
 export type SupportedPlatform =
   | 'youtube'
@@ -253,6 +399,7 @@ export interface PersonalizationSettings {
   subtitleColor: string
   subtitleBgOpacity: number
   rememberPlaybackPosition: boolean
+  voiceHub: VoiceHubSettings
 }
 
 export interface SystemCapabilities {

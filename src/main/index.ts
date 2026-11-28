@@ -14,7 +14,9 @@ import { ALL_MEDIA_EXTENSIONS, SUBTITLE_EXTENSIONS } from '../shared/formats'
 import type {
   BrowserCookieSource,
   DownloadRequest,
-  PersonalizationSettings
+  PersonalizationSettings,
+  VoiceHubSettings,
+  VoiceHubSynthesizeRequest
 } from '../shared/types'
 import { getBinaries } from './binaries'
 import { DownloadManager } from './downloader'
@@ -22,11 +24,13 @@ import { getDefaultMediaDirs, LibraryStore } from './libraryStore'
 import { probeMediaFile } from './mediaProbe'
 import { startMediaServer, type MediaServerHandle } from './mediaServer'
 import type { OffscreenHtmlFetcher } from './threadsExtractor'
+import { VoiceHubManager } from './voiceHubManager'
 
 let mainWindow: BrowserWindow | null = null
 let mediaServer: MediaServerHandle | null = null
 let libraryStore: LibraryStore | null = null
 let downloadManager: DownloadManager | null = null
+let voiceHubManager: VoiceHubManager | null = null
 const pendingOpenFiles: string[] = []
 
 const createOffscreenFetcher: OffscreenHtmlFetcher = async (targetUrl: string) => {
@@ -435,6 +439,85 @@ function registerIpcHandlers(): void {
     libraryStore!.setDownloads(tasks)
     return tasks
   })
+
+  // Voice Hub (AIWF 4 Offline Engines + Optional LAN iMac M4 Remote)
+  const resolveHubSettings = (override?: Partial<VoiceHubSettings>): VoiceHubSettings => ({
+    ...libraryStore!.getSettings().voiceHub,
+    ...(override || {})
+  })
+
+  ipcMain.handle(
+    'voicehub:health',
+    async (_e, override?: Partial<VoiceHubSettings>, skipAutoStart?: boolean) => {
+      return voiceHubManager!.getHealth(resolveHubSettings(override), Boolean(skipAutoStart))
+    }
+  )
+
+  ipcMain.handle('voicehub:catalog', async (_e, override?: Partial<VoiceHubSettings>) => {
+    return voiceHubManager!.getCatalog(resolveHubSettings(override))
+  })
+
+  ipcMain.handle('voicehub:local-token', async () => {
+    return voiceHubManager!.getLocalTokenInfo(resolveHubSettings())
+  })
+
+  ipcMain.handle(
+    'voicehub:preview',
+    async (_e, voiceId: string, lang?: string, engine?: string) => {
+      return voiceHubManager!.getPreviewFilePath(resolveHubSettings(), voiceId, lang, engine)
+    }
+  )
+
+  ipcMain.handle('voicehub:synthesize', async (_e, req: VoiceHubSynthesizeRequest) => {
+    return voiceHubManager!.startSynthesize(resolveHubSettings(), req)
+  })
+
+  ipcMain.handle('voicehub:job', async (_e, jobId: string) => {
+    return voiceHubManager!.getJob(resolveHubSettings(), jobId)
+  })
+
+  ipcMain.handle('voicehub:cancel', async (_e, jobId: string) => {
+    return voiceHubManager!.cancelJob(resolveHubSettings(), jobId)
+  })
+
+  ipcMain.handle('voicehub:history', async () => {
+    return voiceHubManager!.getHistory(resolveHubSettings())
+  })
+
+  ipcMain.handle('voicehub:recipe', async (_e, req: VoiceHubSynthesizeRequest) => {
+    return voiceHubManager!.buildRecipe(resolveHubSettings(), req)
+  })
+
+  ipcMain.handle(
+    'voicehub:save-to-library',
+    async (_e, audioUrlPath: string, suggestedName: string, autoImport = true) => {
+      const settings = libraryStore!.getSettings()
+      const savedPath = await voiceHubManager!.saveHubAudioToLocalDir(
+        settings.voiceHub,
+        audioUrlPath,
+        suggestedName,
+        settings.audioDownloadDir
+      )
+      let item = null
+      if (autoImport) {
+        item = await libraryStore!.addOrUpdateFile(savedPath)
+        if (item) {
+          mainWindow?.webContents.send('library:item-added', item)
+        }
+      }
+      return { filePath: savedPath, item }
+    }
+  )
+
+  ipcMain.handle('voicehub:open-voxa', async (_e, openGemini = false) => {
+    const hubSettings = resolveHubSettings()
+    if (hubSettings.mode === 'local') {
+      await voiceHubManager!.ensureLocalRunning(hubSettings)
+    }
+    const targetUrl = voiceHubManager!.getExternalVoxaUrl(hubSettings, Boolean(openGemini))
+    await shell.openExternal(targetUrl)
+    return targetUrl
+  })
 }
 
 const gotSingleInstanceLock = app.requestSingleInstanceLock()
@@ -472,6 +555,7 @@ app.whenReady().then(async () => {
   await fs.promises.mkdir(settings.audioDownloadDir, { recursive: true }).catch(() => {})
 
   mediaServer = await startMediaServer(path.join(userDataDir, 'cache'))
+  voiceHubManager = new VoiceHubManager(path.join(userDataDir, 'cache'))
 
   downloadManager = new DownloadManager(libraryStore.getDownloads(), {
     offscreenFetcher: createOffscreenFetcher,
@@ -507,6 +591,7 @@ app.whenReady().then(async () => {
 
 app.on('before-quit', async () => {
   downloadManager?.cancelAll()
+  voiceHubManager?.dispose()
   libraryStore?.flushSync()
   if (mediaServer) {
     await mediaServer.stop()

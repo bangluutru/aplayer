@@ -99,6 +99,29 @@ body,
   border-color: rgba(var(--glass-border-rgb), calc(var(--glass-border-alpha) + 0.10));
 }
 
+/* Distinct persistent selection highlight for Voice Studio cards (beats unlayered .glass-card) */
+.glass-card-selected {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--accent) 28%, var(--glass-elevated)),
+    color-mix(in srgb, var(--accent-secondary) 18%, var(--glass-elevated))
+  );
+  border: 2px solid var(--accent);
+  box-shadow:
+    0 8px 24px -10px color-mix(in srgb, var(--accent) 55%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--accent) 32%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+.glass-card-selected:hover {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--accent) 34%, var(--glass-elevated)),
+    color-mix(in srgb, var(--accent-secondary) 22%, var(--glass-elevated))
+  );
+  border-color: var(--accent);
+}
+
 .glass-btn {
   background-color: var(--glass-btn-bg);
   border: 1px solid rgba(var(--glass-border-rgb), calc(var(--glass-border-alpha) * 0.9));

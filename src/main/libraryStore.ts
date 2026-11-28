@@ -95,6 +95,10 @@ export class LibraryStore {
               parsed.settings.equalizer.bands.length === 10
                 ? parsed.settings.equalizer.bands
                 : [...DEFAULT_EQUALIZER.bands]
+          },
+          voiceHub: {
+            ...defaults.voiceHub,
+            ...(parsed.settings?.voiceHub || {})
           }
         },
         items: Array.isArray(parsed.items) ? parsed.items : [],
@@ -145,7 +149,10 @@ export class LibraryStore {
       ...patch,
       equalizer: patch.equalizer
         ? { ...this.data.settings.equalizer, ...patch.equalizer }
-        : this.data.settings.equalizer
+        : this.data.settings.equalizer,
+      voiceHub: patch.voiceHub
+        ? { ...this.data.settings.voiceHub, ...patch.voiceHub }
+        : this.data.settings.voiceHub
     }
     this.scheduleSave()
     return this.data.settings

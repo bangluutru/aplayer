@@ -5,6 +5,7 @@ const vi = {
     player: 'Đang phát',
     library: 'Thư viện',
     downloader: 'Tải Media',
+    voice: 'Voice Studio',
     personalize: 'Cá nhân hoá',
     openFiles: 'Mở file',
     openFolder: 'Thêm thư mục',
@@ -182,7 +183,7 @@ const vi = {
     ['[ / ]', 'Giảm / Tăng tốc độ phát'],
     ['E', 'Mở / Đóng Equalizer'],
     ['Cmd + O', 'Mở file media từ máy'],
-    ['1 / 2 / 3 / 4', 'Chuyển nhanh Đang phát / Thư viện / Tải Media / Cá nhân hoá']
+    ['1 / 2 / 3 / 4 / 5', 'Chuyển nhanh Đang phát / Thư viện / Tải Media / Voice Studio / Cá nhân hoá']
   ],
   dropOverlay: {
     title: 'Thả file hoặc thư mục vào đây',
@@ -195,6 +196,7 @@ const en: typeof vi = {
     player: 'Now Playing',
     library: 'Library',
     downloader: 'Downloader',
+    voice: 'Voice Studio',
     personalize: 'Personalize',
     openFiles: 'Open Files',
     openFolder: 'Add Folder',
@@ -372,7 +374,7 @@ const en: typeof vi = {
     ['[ / ]', 'Decrease / Increase speed'],
     ['E', 'Toggle Equalizer'],
     ['Cmd + O', 'Open local media files'],
-    ['1 / 2 / 3 / 4', 'Switch Now Playing / Library / Downloader / Personalize']
+    ['1 / 2 / 3 / 4 / 5', 'Switch Now Playing / Library / Downloader / Voice Studio / Personalize']
   ],
   dropOverlay: {
     title: 'Drop Media Files or Folders Here',

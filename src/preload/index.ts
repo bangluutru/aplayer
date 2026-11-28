@@ -10,7 +10,14 @@ import type {
   PersonalizationSettings,
   Playlist,
   SupportedPlatform,
-  SystemCapabilities
+  SystemCapabilities,
+  VoiceHubCatalog,
+  VoiceHubHealth,
+  VoiceHubJob,
+  VoiceHubRecipeResult,
+  VoiceHubSettings,
+  VoiceHubSynthesizeRequest,
+  VoiceHubTokenInfo
 } from '../shared/types'
 
 const aplayerAPI = {
@@ -93,6 +100,36 @@ const aplayerAPI = {
     ipcRenderer.invoke('downloader:remove', taskId),
   clearCompletedDownloads: (): Promise<DownloadTask[]> =>
     ipcRenderer.invoke('downloader:clear-completed'),
+
+  voiceHubHealth: (
+    override?: Partial<VoiceHubSettings>,
+    skipAutoStart?: boolean
+  ): Promise<VoiceHubHealth> => ipcRenderer.invoke('voicehub:health', override, skipAutoStart),
+  voiceHubCatalog: (override?: Partial<VoiceHubSettings>): Promise<VoiceHubCatalog> =>
+    ipcRenderer.invoke('voicehub:catalog', override),
+  voiceHubLocalToken: (): Promise<VoiceHubTokenInfo> => ipcRenderer.invoke('voicehub:local-token'),
+  voiceHubPreview: (
+    voiceId: string,
+    lang?: string,
+    engine?: string
+  ): Promise<{ filePath: string; source: string }> =>
+    ipcRenderer.invoke('voicehub:preview', voiceId, lang, engine),
+  voiceHubSynthesize: (req: VoiceHubSynthesizeRequest): Promise<VoiceHubJob> =>
+    ipcRenderer.invoke('voicehub:synthesize', req),
+  voiceHubJob: (jobId: string): Promise<VoiceHubJob> => ipcRenderer.invoke('voicehub:job', jobId),
+  voiceHubCancel: (jobId: string): Promise<{ state: string }> =>
+    ipcRenderer.invoke('voicehub:cancel', jobId),
+  voiceHubHistory: (): Promise<VoiceHubJob[]> => ipcRenderer.invoke('voicehub:history'),
+  voiceHubRecipe: (req: VoiceHubSynthesizeRequest): Promise<VoiceHubRecipeResult> =>
+    ipcRenderer.invoke('voicehub:recipe', req),
+  voiceHubSaveToLibrary: (
+    audioUrlPath: string,
+    suggestedName: string,
+    autoImport = true
+  ): Promise<{ filePath: string; item: MediaItem | null }> =>
+    ipcRenderer.invoke('voicehub:save-to-library', audioUrlPath, suggestedName, autoImport),
+  voiceHubOpenVoxa: (openGemini = false): Promise<string> =>
+    ipcRenderer.invoke('voicehub:open-voxa', openGemini),
 
   onDownloadTaskUpdated: (callback: (task: DownloadTask) => void): (() => void) => {
     const listener = (_event: Electron.IpcRendererEvent, task: DownloadTask): void => callback(task)

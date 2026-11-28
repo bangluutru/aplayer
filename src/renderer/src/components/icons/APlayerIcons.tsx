@@ -681,3 +681,41 @@ export const IconSun: React.FC<IconProps> = ({ size = 15, strokeWidth = 1.9, cla
     <path d="M12 3V5M12 19V21M3 12H5M19 12H21M5.6 5.6L7.1 7.1M16.9 16.9L18.4 18.4M18.4 5.6L16.9 7.1M7.1 16.9L5.6 18.4" />
   </svg>
 )
+
+export const IconMicrophone: React.FC<IconProps> = ({ size = 18, strokeWidth = 1.9, className = '', ...rest }) => (
+  <svg {...baseProps(size, strokeWidth, className)} {...rest}>
+    <rect x="9" y="3" width="6" height="10" rx="3" />
+    <path d="M5.5 10.5A6.5 6.5 0 0 0 18.5 10.5" />
+    <path d="M12 17V21M8.5 21H15.5" />
+  </svg>
+)
+
+export const IconServer: React.FC<IconProps> = ({ size = 15, strokeWidth = 1.9, className = '', ...rest }) => (
+  <svg {...baseProps(size, strokeWidth, className)} {...rest}>
+    <rect x="3.5" y="4" width="17" height="6.5" rx="2" />
+    <rect x="3.5" y="13.5" width="17" height="6.5" rx="2" />
+    <path d="M7.5 7.25H7.51M7.5 16.75H7.51M11 7.25H16.5M11 16.75H16.5" />
+  </svg>
+)
+
+export const IconExternalLink: React.FC<IconProps> = ({ size = 14, strokeWidth = 1.9, className = '', ...rest }) => (
+  <svg {...baseProps(size, strokeWidth, className)} {...rest}>
+    <path d="M15 4H20V9" />
+    <path d="M10.5 13.5L20 4" />
+    <path d="M18.5 13.5V18A2 2 0 0 1 16.5 20H6A2 2 0 0 1 4 18V7.5A2 2 0 0 1 6 5.5H10.5" />
+  </svg>
+)
+
+export const IconCopy: React.FC<IconProps> = ({ size = 14, strokeWidth = 1.9, className = '', ...rest }) => (
+  <svg {...baseProps(size, strokeWidth, className)} {...rest}>
+    <rect x="9" y="9" width="11" height="11" rx="2.2" />
+    <path d="M5.5 15H5A2 2 0 0 1 3 13V5A2 2 0 0 1 5 3H13A2 2 0 0 1 15 5V5.5" />
+  </svg>
+)
+
+export const IconRotateCcw: React.FC<IconProps> = ({ size = 14, strokeWidth = 1.9, className = '', ...rest }) => (
+  <svg {...baseProps(size, strokeWidth, className)} {...rest}>
+    <path d="M4.5 10A7.5 7.5 0 1 1 6.7 17.3" />
+    <path d="M4.5 5V10H9.5" />
+  </svg>
+)

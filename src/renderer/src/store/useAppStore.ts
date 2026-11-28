@@ -204,7 +204,8 @@ export const useAppStore = create<AppState>((set, get) => ({
     const optimistic: PersonalizationSettings = {
       ...prev,
       ...patch,
-      equalizer: patch.equalizer ? { ...prev.equalizer, ...patch.equalizer } : prev.equalizer
+      equalizer: patch.equalizer ? { ...prev.equalizer, ...patch.equalizer } : prev.equalizer,
+      voiceHub: patch.voiceHub ? { ...prev.voiceHub, ...patch.voiceHub } : prev.voiceHub
     }
     set({ settings: optimistic })
     if (patch.equalizer) {

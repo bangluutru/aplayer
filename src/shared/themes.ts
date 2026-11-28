@@ -1,4 +1,4 @@
-import type { EqualizerSettings, PersonalizationSettings } from './types'
+import type { EqualizerSettings, PersonalizationSettings, VoiceHubSettings } from './types'
 
 export interface ThemePreset {
   id: string
@@ -223,6 +223,19 @@ export const DEFAULT_EQUALIZER: EqualizerSettings = {
   stereoBalance: 0
 }
 
+export function createDefaultVoiceHubSettings(defaultAudioDir: string): VoiceHubSettings {
+  const voiceDir = defaultAudioDir ? `${defaultAudioDir}/VoiceStudio` : ''
+  return {
+    mode: 'local',
+    localPort: 8765,
+    remoteUrl: '',
+    remoteToken: '',
+    autoImportGenerated: true,
+    outputDir: voiceDir,
+    enableGeminiCloud: false
+  }
+}
+
 export function createDefaultSettings(defaultVideoDir: string, defaultAudioDir: string): PersonalizationSettings {
   return {
     language: 'vi',
@@ -251,7 +264,8 @@ export function createDefaultSettings(defaultVideoDir: string, defaultAudioDir: 
     subtitleSizePx: 22,
     subtitleColor: '#FFFFFF',
     subtitleBgOpacity: 0.65,
-    rememberPlaybackPosition: true
+    rememberPlaybackPosition: true,
+    voiceHub: createDefaultVoiceHubSettings(defaultAudioDir)
   }
 }
 
